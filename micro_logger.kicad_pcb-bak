@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 10)
+    (drawings 14)
     (tracks 245)
     (zones 0)
     (modules 26)
@@ -1132,7 +1132,7 @@
     (tags capacitor)
     (path /5B15204E)
     (attr smd)
-    (fp_text reference C5 (at 0 -1.43 270) (layer F.SilkS)
+    (fp_text reference C5 (at 2.159 0) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value .1uF (at 0 1.43 270) (layer F.Fab)
@@ -1408,6 +1408,10 @@
       (xy -0.195747 -0.756194) (xy -0.05761 -0.71209)) (layer F.SilkS) (width 0.01))
   )
 
+  (gr_arc (start 155.448 101.6) (end 155.448 101.854) (angle -90) (layer Edge.Cuts) (width 0.1))
+  (gr_arc (start 155.448 74.676) (end 155.702 74.676) (angle -90) (layer Edge.Cuts) (width 0.1))
+  (gr_arc (start 139.192 74.676) (end 139.192 74.422) (angle -90) (layer Edge.Cuts) (width 0.1))
+  (gr_arc (start 139.192 101.6) (end 138.938 101.6) (angle -90) (layer Edge.Cuts) (width 0.1))
   (gr_text V1 (at 151.892 100.965) (layer F.SilkS)
     (effects (font (size 1.2 1.2) (thickness 0.3)))
   )
@@ -1462,10 +1466,10 @@
     (arrow2a (pts (xy 138.938 68.199) (xy 140.064504 68.785421)))
     (arrow2b (pts (xy 138.938 68.199) (xy 140.064504 67.612579)))
   )
-  (gr_line (start 155.702 74.422) (end 138.938 74.422) (layer Edge.Cuts) (width 0.1) (tstamp 5BB278F2))
-  (gr_line (start 155.702 101.854) (end 155.702 74.422) (layer Edge.Cuts) (width 0.1) (tstamp 5BB20FB1))
-  (gr_line (start 138.938 101.854) (end 155.702 101.854) (layer Edge.Cuts) (width 0.1))
-  (gr_line (start 138.938 74.422) (end 138.938 101.854) (layer Edge.Cuts) (width 0.1))
+  (gr_line (start 155.448 74.422) (end 139.192 74.422) (layer Edge.Cuts) (width 0.1) (tstamp 5BB278F2))
+  (gr_line (start 155.702 101.6) (end 155.702 74.422) (layer Edge.Cuts) (width 0.1) (tstamp 5BB20FB1))
+  (gr_line (start 139.192 101.854) (end 155.448 101.854) (layer Edge.Cuts) (width 0.1))
+  (gr_line (start 138.938 74.676) (end 138.938 101.6) (layer Edge.Cuts) (width 0.1))
 
   (via (at 148.59 97.536) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 1) (status 30))
   (via (at 140.208 91.694) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 1))

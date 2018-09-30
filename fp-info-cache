@@ -1,4 +1,4 @@
-21426756751513206
+21429833446929206
 Air_Coils_SML_NEOSID
 Neosid_Air-Coil_SML_1turn_HDM0131A
 Neosid, Air-Coil, SML, 1turn, HDM0131A,
@@ -10646,6 +10646,13 @@ CFAH0802D-YYH-JP
 0
 20
 16
+components
+gait_logo
+
+
+0
+0
+0
 components
 HRS_DM3AT-SF-PEJM5
 Micro SD card holder with push-to-eject feature.
@@ -92326,6 +92333,13 @@ Symbol
 FCC-Logo_48.3x40mm_SilkScreen
 FCC marking
 Logo FCC certification
+0
+0
+0
+Symbol
+gait_logo
+
+
 0
 0
 0
