@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:bed_sensor-cache
+LIBS:micro_logger-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
