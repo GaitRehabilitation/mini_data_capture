@@ -411,7 +411,7 @@ F 8 "TDK InvenSense" H 8350 2250 50  0001 L BNN "Field8"
 	1    0    0    -1  
 $EndComp
 $Comp
-L regul:TLV70218_SOT23-5 U2
+L micro_logger-rescue:TLV70218_SOT23-5-regul U2
 U 1 1 5BC82A48
 P 2700 2300
 F 0 "U2" H 2700 2642 50  0000 C CNN

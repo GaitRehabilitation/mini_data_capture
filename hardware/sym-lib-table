@@ -3,4 +3,5 @@
   (lib (name SD)(type Legacy)(uri ${KIPRJMOD}/components/DM3AT-SF-PEJM5.lib)(options "")(descr ""))
   (lib (name bed_sensor-rescue)(type Legacy)(uri ${KIPRJMOD}/bed_sensor-rescue.lib)(options "")(descr ""))
   (lib (name ICM-20948)(type Legacy)(uri ${KIPRJMOD}/components/ICM-20948.lib)(options "")(descr ""))
+  (lib (name micro_logger-rescue)(type Legacy)(uri ${KIPRJMOD}/micro_logger-rescue.lib)(options "")(descr ""))
 )
