@@ -15,21 +15,57 @@ int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ;
 int loggingButton = 0;
 volatile bool wakeUpFlag = false;
 
+inline void selectbank_0(){
+    Wire.beginTransmission(MPU_addr);
+    Wire.write(0x7F);
+    Wire.write(0);
+    Wire.endTransmission(true);
+}
+
+
+inline void selectbank_1(){
+    Wire.beginTransmission(MPU_addr);
+    Wire.write(0x7F);
+    Wire.write(B00010000);
+    Wire.endTransmission(true);
+}
+
+
+inline void selectbank_2(){
+    Wire.beginTransmission(MPU_addr);
+    Wire.write(0x7F);
+    Wire.write(B00100000);
+    Wire.endTransmission(true);
+}
+
+
+inline void selectbank_3(){
+    Wire.beginTransmission(MPU_addr);
+    Wire.write(0x7F);
+    Wire.write(B00110000);
+    Wire.endTransmission(true);
+}
+
 void setup ()
 {
+
+    delay(1000);
+
+    selectbank_2();
     //set sensitivity @ address 1C
     Wire.beginTransmission(MPU_addr);
-    Wire.write(0x1C);
-    Wire.write(B00010000);   //here is the byte for sensitivity (4g here)
+    Wire.write(0x14);
+    Wire.write(B0000011);   //here is the byte for sensitivity (4g here)
     Wire.endTransmission(true);
 
 
     Wire.beginTransmission(MPU_addr);
-    Wire.write(0x1B);
-    Wire.write(B00010000);   //here is the byte for sensitivity (1000 degree sec)
+    Wire.write(0x01);
+    Wire.write(B00000101);   //here is the byte for sensitivity (1000 degree sec)
     Wire.endTransmission(true);
 
     pinMode(LOGGING_BUTTON_PIN, INPUT);
+    selectbank_0();
     sleepNow();
 }
 
@@ -43,7 +79,8 @@ void  sleepNow(){
 
     Wire.begin();
     Wire.beginTransmission(MPU_addr);
-    Wire.write(B010000);     // set to mpu to sleep to avoid consuming power
+    Wire.write(0x06);
+    Wire.write(B01000000);     // set to mpu to sleep to avoid consuming power
     Wire.endTransmission(true);
 
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);   // sleep mode is set here
@@ -79,7 +116,7 @@ void loop() {
 
         Wire.begin();
         Wire.beginTransmission(MPU_addr);
-        Wire.write(0x6B);  // PWR_MGMT_1 register
+        Wire.write(0x06);  // PWR_MGMT_1 register
         Wire.write(0);     // set to zero (wakes up the MPU-6050)
         Wire.endTransmission(true);
         wakeUpFlag = false;
@@ -87,16 +124,17 @@ void loop() {
 
         if (SD.begin(CHIP_SELECT_PIN)) {
             Wire.beginTransmission(MPU_addr);
-            Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
+            Wire.write(0x2D);  // starting with register 0x3B (ACCEL_XOUT_H)
             Wire.endTransmission(false);
             Wire.requestFrom(MPU_addr, 14, true); // request a total of 14 registers
             AcX = Wire.read() << 8 | Wire.read(); // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
             AcY = Wire.read() << 8 | Wire.read(); // 0x3D (ACCEL_YOUT_H) a& 0x3E (ACCEL_YOUT_L)
             AcZ = Wire.read() << 8 | Wire.read(); // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
-            Tmp = Wire.read() << 8 | Wire.read(); // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
             GyX = Wire.read() << 8 | Wire.read(); // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
             GyY = Wire.read() << 8 | Wire.read(); // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
             GyZ = Wire.read() << 8 | Wire.read(); // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+            Tmp = Wire.read() << 8 | Wire.read(); // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
+
 
             File dataFile = SD.open(fileName, FILE_WRITE);
             if (dataFile) {
