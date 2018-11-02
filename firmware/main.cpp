@@ -15,57 +15,14 @@ int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ;
 int loggingButton = 0;
 volatile bool wakeUpFlag = false;
 
-inline void selectbank_0(){
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x7F);
-    Wire.write(0);
-    Wire.endTransmission(true);
-}
 
-
-inline void selectbank_1(){
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x7F);
-    Wire.write(B00010000);
-    Wire.endTransmission(true);
-}
-
-
-inline void selectbank_2(){
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x7F);
-    Wire.write(B00100000);
-    Wire.endTransmission(true);
-}
-
-
-inline void selectbank_3(){
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x7F);
-    Wire.write(B00110000);
-    Wire.endTransmission(true);
-}
 
 void setup ()
 {
-
-    delay(1000);
-
-    selectbank_2();
-    //set sensitivity @ address 1C
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x14);
-    Wire.write(B0000011);   //here is the byte for sensitivity (4g here)
-    Wire.endTransmission(true);
-
-
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x01);
-    Wire.write(B00000101);   //here is the byte for sensitivity (1000 degree sec)
-    Wire.endTransmission(true);
+    Wire.begin();
 
     pinMode(LOGGING_BUTTON_PIN, INPUT);
-    selectbank_0();
+
     sleepNow();
 }
 
@@ -76,8 +33,6 @@ void wakeUpNow()        // here the interrupt is handled after wakeup
 
 
 void  sleepNow(){
-
-    Wire.begin();
     Wire.beginTransmission(MPU_addr);
     Wire.write(0x06);
     Wire.write(B01000000);     // set to mpu to sleep to avoid consuming power
@@ -114,11 +69,32 @@ void loop() {
             count++;
         }
 
-        Wire.begin();
         Wire.beginTransmission(MPU_addr);
         Wire.write(0x06);  // PWR_MGMT_1 register
         Wire.write(0);     // set to zero (wakes up the MPU-6050)
         Wire.endTransmission(true);
+
+        Wire.beginTransmission(MPU_addr);
+        Wire.write(0x7F); 
+        Wire.write(B00100000); //SELECT BANK 2
+        Wire.endTransmission(true);
+    
+        Wire.beginTransmission(MPU_addr);
+        Wire.write(0x14);
+        Wire.write(B0000011);   //here is the byte for sensitivity (4g here)
+        Wire.endTransmission(true);
+
+        Wire.beginTransmission(MPU_addr);
+        Wire.write(0x01);
+        Wire.write(B00000101);   //here is the byte for sensitivity (1000 degree sec)
+        Wire.endTransmission(true);
+
+        Wire.beginTransmission(MPU_addr);
+        Wire.write(0x7F);
+        Wire.write(0);
+        Wire.endTransmission(true);
+
+
         wakeUpFlag = false;
     } else {
 
@@ -156,7 +132,6 @@ void loop() {
                 dataFile.print("\n");
                 dataFile.close();
             }
-            delay(10);
         } else {
             // put logger to sleep if no SD card is present
             sleepNow();
