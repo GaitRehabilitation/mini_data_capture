@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 6)
+    (drawings 10)
     (tracks 415)
     (zones 0)
     (modules 33)
@@ -579,7 +579,7 @@
     )
   )
 
-  (module Capacitor_SMD:C_0603_1608Metric (layer F.Cu) (tedit 5BE0CD40) (tstamp 5BC87369)
+  (module Capacitor_SMD:C_0603_1608Metric (layer F.Cu) (tedit 5BE0CD40) (tstamp 5BE0D8EC)
     (at 141.37122 98.9076 180)
     (descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags capacitor)
@@ -1511,6 +1511,18 @@
     )
   )
 
+  (gr_text "+\n" (at 152.654 90.551) (layer F.SilkS) (tstamp 5BE0D6FF)
+    (effects (font (size 0.5 0.5) (thickness 0.125)))
+  )
+  (gr_text "+\n" (at 154.305 90.551) (layer F.SilkS) (tstamp 5BE0D6FD)
+    (effects (font (size 0.5 0.5) (thickness 0.125)))
+  )
+  (gr_text "+\n" (at 147.701 77.978) (layer F.SilkS) (tstamp 5BE0D6FB)
+    (effects (font (size 0.5 0.5) (thickness 0.125)))
+  )
+  (gr_text "+\n" (at 141.478 74.676) (layer F.SilkS)
+    (effects (font (size 0.5 0.5) (thickness 0.125)))
+  )
   (gr_line (start 155.702 73.66) (end 138.176 73.66) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 155.702 103.124) (end 155.702 73.66) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 138.176 103.124) (end 155.702 103.124) (layer Edge.Cuts) (width 0.1) (tstamp 5BC882B8))
