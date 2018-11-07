@@ -4,3 +4,6 @@
 [submodule "firmware/3rdparty/SD"]
 	path = firmware/3rdparty/SD
 	url = git@github.com:arduino-libraries/SD.git
+[submodule "firmware/3rdparty/SdFat"]
+	path = firmware/3rdparty/SdFat
+	url = https://github.com/greiman/SdFat.git
