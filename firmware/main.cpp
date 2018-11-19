@@ -266,10 +266,10 @@ void recordBinData()
                 curBlock->overrun = overrun;
                 overrun = 0;
             }
-            if ((int32_t)(logTime - micros()) < 0)
-            {
-                break;
-            }
+            // while ((int32_t)(logTime - micros()) < 0)
+            // {
+            //     delayMicroseconds(100);
+            // }
             int32_t delta;
             do
             {
