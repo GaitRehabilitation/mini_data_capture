@@ -189,6 +189,7 @@ void loop()
 
 void recordBinData()
 {
+start_recording:
     const uint8_t QUEUE_DIM = BUFFER_BLOCK_COUNT + 1;
     // Index of last queue location.
     const uint8_t QUEUE_LAST = QUEUE_DIM - 1;
@@ -316,6 +317,7 @@ void recordBinData()
             if (bn == FILE_BLOCK_COUNT)
             {
                 createBin();
+                goto start_recording;
             }
         }
     }
