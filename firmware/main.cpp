@@ -53,7 +53,7 @@ void processorSleep();
 void acquireData(data_t *data);
 void createBin();
 void configureMPU();
-void recordBinData();
+bool recordBinData();
 
 void setup()
 {
@@ -182,14 +182,13 @@ void loop()
     }
     else
     {
-        recordBinData();
+        while(recordBinData()){};
         processorSleep();
     }
 }
 
-void recordBinData()
-{
-start_recording:
+bool recordBinData(){
+
     const uint8_t QUEUE_DIM = BUFFER_BLOCK_COUNT + 1;
     // Index of last queue location.
     const uint8_t QUEUE_LAST = QUEUE_DIM - 1;
@@ -210,7 +209,7 @@ start_recording:
     emptyStack[0] = (block_t *)sd.vol()->cacheClear();
     if (emptyStack[0] == 0)
     {
-        return;
+        return false;
     }
     // Put rest of buffers on the empty stack.
     for (int i = 1; i < BUFFER_BLOCK_COUNT; i++)
@@ -223,7 +222,7 @@ start_recording:
     // Start a multiple block write.
     if (!sd.card()->writeStart(binFile.firstBlock()))
     {
-        return;
+        return false;
     }
 
     bool closeFile = false;
@@ -317,10 +316,11 @@ start_recording:
             if (bn == FILE_BLOCK_COUNT)
             {
                 createBin();
-                goto start_recording;
+                return true;
             }
         }
     }
+    return false;
 }
 
 void acquireData(data_t *data)
