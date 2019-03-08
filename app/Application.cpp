@@ -21,7 +21,7 @@ Application::Application(QWidget *parent) : QMainWindow(parent),ui(new Ui::Appli
         foreach(QString file,files){
             FileDecoder* decoder = new FileDecoder(file,this);
             connect(decoder,&FileDecoder::complete,[=](){
-                QMetaObject::invokeMethod(decoder,[=] (){
+                QCoreApplication::postEvent([=] (){
                     this->entriesCompleted += 1;
                     ui->processEntries->addItem(new QListWidgetItem(file + " ... done"));
                     ui->uploadProgress->setValue((int)(((float)this->entriesCompleted/(float)this->numberOfEntries)* 100));
