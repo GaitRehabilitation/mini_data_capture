@@ -20,6 +20,7 @@ private:
 public:
     Application(QWidget *parent = nullptr);
 
+
 };
 
 
