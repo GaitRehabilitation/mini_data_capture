@@ -25,7 +25,6 @@ before_build:
   - git config --global user.email "polli104@mail.chapman.edu"
   - git config --global user.name "Michael Pollind"
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars%build%.bat"
-  - git submodule update --init --recursive
   - mkdir build
   - cd build
   - cmake DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:\\Qt\\%qt%\\%qt_target%\\lib\\cmake -DCPACK_PACKAGE_VERSION=%appveyor_build_version%  -G "CodeBlocks - NMake Makefiles" %APPVEYOR_BUILD_FOLDER%
