@@ -72,14 +72,14 @@ if (MSVC)
     find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
 
     add_custom_command(
-            TARGET SMART POST_BUILD
+            TARGET MINI_DECODER POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/windeployqt_stuff
-            COMMAND ${WINDEPLOYQT_EXECUTABLE} --compiler-runtime --dir ${CMAKE_BINARY_DIR}/windeployqt_stuff $<TARGET_FILE:SMART>
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} --compiler-runtime --dir ${CMAKE_BINARY_DIR}/windeployqt_stuff $<TARGET_FILE:MINI_DECODER>
     )
 
     add_custom_command(
-            TARGET SMART POST_BUILD
-            COMMAND ${WINDEPLOYQT_EXECUTABLE} --compiler-runtime $<TARGET_FILE:SMART>
+            TARGET MINI_DECODER POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} --compiler-runtime $<TARGET_FILE:MINI_DECODER>
     )
 
     install(
