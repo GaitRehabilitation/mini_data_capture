@@ -13,13 +13,19 @@
 Application::Application(QWidget *parent) : QMainWindow(parent),ui(new Ui::Application){
     ui->setupUi(this);
 
-    connect(ui->upload_button,&FileUpload::onFilesUploaded,[=](const QStringList& files){
+    connect(ui->uploadButton,&FileUpload::onFilesUploaded,[=](const QStringList& files){
+        this->numberOfEntries = files.length();
+        this->entriesCompleted = 0;
+        ui->uploadProgress->setValue(0);
+
         foreach(QString file,files){
-            QLabel* label = new QLabel(this);
-            FileDecoder* decoder = new FileDecoder(file,label);
-            ui->uploadEntries->addWidget(label);
-            connect(decoder,&FileDecoder::totalSamples,[=](qint64 total){
-                label->setText(QString("%1 Samples").arg(total));
+            FileDecoder* decoder = new FileDecoder(file,this);
+            connect(decoder,&FileDecoder::complete,[=](){
+                QMetaObject::invokeMethod(this,[=] (){
+                    this->entriesCompleted += 1;
+                    ui->processEntries->addItem(new QListWidgetItem(file + " ... done"));
+                    ui->uploadProgress->setValue((int)(((float)this->entriesCompleted/(float)this->numberOfEntries)* 100));
+                });
             });
             QThreadPool::globalInstance()->start(decoder);
         }

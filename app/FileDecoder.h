@@ -15,7 +15,7 @@ public:
     explicit FileDecoder(const QString& path,QObject* object = nullptr);
     void run() override;
 signals:
-    void totalSamples(qint64 samples);
+    void complete();
 };
 
 

@@ -15,6 +15,8 @@ class Application : public QMainWindow {
     Q_OBJECT
 private:
     Ui::Application *ui;
+    int entriesCompleted;
+    int numberOfEntries;
 public:
     Application(QWidget *parent = nullptr);
 

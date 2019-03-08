@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="FileUpload" name="upload_button">
+     <widget class="FileUpload" name="uploadButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -25,7 +25,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>196</width>
+        <width>186</width>
         <height>100</height>
        </size>
       </property>
@@ -71,45 +71,14 @@ QToolButton#upload_button:hover {
      </widget>
     </item>
     <item>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="widgetResizable">
-       <bool>true</bool>
+     <widget class="QProgressBar" name="uploadProgress">
+      <property name="value">
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="grid">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>784</width>
-         <height>385</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QVBoxLayout" name="uploadEntries"/>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
      </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="processEntries"/>
     </item>
     <item>
      <widget class="QPushButton" name="clearBtn">
@@ -127,7 +96,7 @@ QToolButton#upload_button:hover {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

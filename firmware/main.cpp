@@ -157,12 +157,12 @@ void configureMPU()
 
     Wire.beginTransmission(MPU_addr);
     Wire.write(0x14);
-    Wire.write(B0000101); //sensitivity (8g here)
+    Wire.write(B0000010); //sensitivity (4g here)
     Wire.endTransmission(true);
 
     Wire.beginTransmission(MPU_addr);
     Wire.write(0x01);
-    Wire.write(B00000101); //here is the byte for sensitivity (1000 degree sec)
+    Wire.write(B00000100); //here is the byte for sensitivity (1000 degree sec)
     Wire.endTransmission(true);
 
     Wire.beginTransmission(MPU_addr);

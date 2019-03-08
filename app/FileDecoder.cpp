@@ -13,13 +13,13 @@
 // conversion factors
 // https://www.invensense.com/products/motion-tracking/9-axis/icm-20948/
 //#define ACCEL_SENSIVITY 16384 // +-2g
-//#define ACCEL_SENSIVITY 8192 // +-4g
-#define ACCEL_SENSIVITY 4096 // +-8g
+#define ACCEL_SENSIVITY 8192 // +-4g
+//#define ACCEL_SENSIVITY 4096 // +-8g
 //#define ACCEL_SENSIVITY 2048 // +-16g
 
 //#define GYRO_SENSIVITY 131  // +-250  deg/s
-//#define GYRO_SENSIVITY 65.5 // +-500  deg/s
-#define GYRO_SENSIVITY 32.8 // +-1000 deg/s
+#define GYRO_SENSIVITY 65.5 // +-500  deg/s
+//#define GYRO_SENSIVITY 32.8 // +-1000 deg/s
 //#define GYRO_SENSIVITY 16.4 // +-2000 deg/s
 
 
@@ -30,7 +30,6 @@ FileDecoder::FileDecoder(const QString& path,QObject* obj ): QObject::QObject(ob
 void FileDecoder::run() {
 
     QFile file(_path);
-    qint64 samples = 0;
 
     if(!file.open(QIODevice::ReadOnly)){
         return;
@@ -44,7 +43,7 @@ void FileDecoder::run() {
         return;
     }
     QTextStream out(&newFile);
-    out << "epoch(ms),gyro_x(fdps),gyro_y(fdps),gyro_z(fdps)" << '\n';
+    out << "epoch(micro seconds),acc_x(g),acc_y(g),acc_z(g),gyro_x(fdps),gyro_y(fdps),gyro_z(fdps),temp" << '\n';
     while (file.read(payload,512) > 0){
         int idx = 0;
         short count =
@@ -93,10 +92,9 @@ void FileDecoder::run() {
             (((double)gyroy)/GYRO_SENSIVITY) << ',' <<
             (((double)gyroz)/GYRO_SENSIVITY) << ',' <<
              temp << '\n';
-            samples++;
         }
-        emit totalSamples(samples);
 
     }
+    emit complete();
 
 }
