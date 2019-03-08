@@ -2,6 +2,9 @@
 
 ![preview](./preview.jpg)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/m28o2q5g6hhju8yk?svg=true)](https://ci.appveyor.com/project/pollend/mini-data-capture)
+
+
 
 ## Programming
 
@@ -13,28 +16,6 @@ The current maintainers of this repository are:
 
 * Michael Pollind <polli104@mail.chapman.edu>
 
-
-# Decoder App
-
-#### Build Setup
-
-``` bash
-# install dependencies
-yarn install
-
-# serve with hot reload at localhost:9080
-yarn run dev
-
-# build electron application for production
-yarn run build
-
-# run unit & end-to-end tests
-yarn test
-
-# lint all JS/Vue component files in `src/`
-yarn run lint
-
-```
 
 # License
 
