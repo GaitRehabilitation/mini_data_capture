@@ -47,4 +47,4 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: cfQYapw1kaToQWhkDuAZI7Q6VUBCDmRqm/+eziQ8yJoekJXgT3l8JBAflzCtpLVe
-repository: GaitRehabilitation/mini_data_capture
+    repository: GaitRehabilitation/mini_data_capture
