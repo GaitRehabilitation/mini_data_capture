@@ -25,7 +25,11 @@ Application::Application(QWidget *parent) : QMainWindow(parent),ui(new Ui::Appli
                     ui->processEntries->addItem(new QListWidgetItem(file + " ... done"));
                     ui->uploadProgress->setValue((int)(((float)this->entriesCompleted/(float)this->numberOfEntries)* 100));
             },Qt::QueuedConnection);
-            QThreadPool::globalInstance()->start(decoder);
+			connect(decoder, &FileDecoder::finished, this, [=]() {
+				decoder->deleteLater();
+			});
+			decoder->start();
+           //QThreadPool::globalInstance()->start(decoder);
         }
     });
 

@@ -5,15 +5,16 @@
 #ifndef MINI_DATA_CAPTURE_FILEDECODER_H
 #define MINI_DATA_CAPTURE_FILEDECODER_H
 
-#include <QRunnable>
+#include <QThread>
 #include <QObject>
-class FileDecoder : public QObject,public QRunnable{
+
+class FileDecoder : public QThread {
     Q_OBJECT
 private:
     QString _path;
 public:
     explicit FileDecoder(const QString& path,QObject* object = nullptr);
-    void run() override;
+    virtual void run();
 signals:
     void complete();
 };

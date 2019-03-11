@@ -9,6 +9,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtCore/QTextStream>
 #include <QDebug>
+#include <QThread>
 
 // conversion factors
 // https://www.invensense.com/products/motion-tracking/9-axis/icm-20948/
@@ -23,7 +24,7 @@
 //#define GYRO_SENSIVITY 16.4 // +-2000 deg/s
 
 
-FileDecoder::FileDecoder(const QString& path,QObject* obj ): QObject::QObject(obj),_path(path){
+FileDecoder::FileDecoder(const QString& path,QObject* obj ): QThread::QThread(obj),_path(path){
 
 }
 
