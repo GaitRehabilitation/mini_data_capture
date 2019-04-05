@@ -1,10 +1,10 @@
 EESchema Schematic File Version 4
 LIBS:micro_logger-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 2
+Sheet 2 2
 Title ""
 Date ""
 Rev ""

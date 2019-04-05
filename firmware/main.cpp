@@ -7,12 +7,15 @@
 
 const int MPU_addr = 0x68;        // I2C address of the MPU-6050
 const int LOGGING_BUTTON_PIN = 2; // logger button
-const int CHIP_SELECT_PIN = 10;
+const int CHIP_SELECT_PIN = 10;   // SD chip select
 
-const uint32_t LOG_INTERVAL_USEC = 2000;
+// 500Hz capture rate
+const uint32_t LOG_INTERVAL_USEC = 2000; // intervals between data capture 1/(LOG_INTERVAL_USEC * .000001) = Sample rate in Hz
 
+// number of blocks to queue before each write cycle
 const uint8_t BUFFER_BLOCK_COUNT = 10;
 
+// number of blocks to allocate for an empty file
 const uint32_t FILE_BLOCK_COUNT = 256000;
 
 char fileName[13];
@@ -20,7 +23,6 @@ int loggingButton = 0;
 volatile bool wakeUpFlag = false;
 
 SdFat sd;
-
 SdBaseFile binFile;
 
 const uint8_t ACCEL_DIM = 3;
@@ -36,15 +38,16 @@ struct data_t
 // Number of data records in a block.
 const uint16_t DATA_DIM = (512 - 4) / sizeof(data_t);
 
-//Compute fill so block size is 512 bytes.  FILL_DIM may be zero.
+// Compute fill so block size is 512 bytes.  FILL_DIM may be zero.
 const uint16_t FILL_DIM = 512 - 4 - DATA_DIM * sizeof(data_t);
 
+// a block of data for each chunk in the SD card 512 bytes
 struct block_t
 {
     uint16_t count;
     uint16_t overrun;
     data_t data[DATA_DIM];
-    uint8_t fill[FILL_DIM];
+    uint8_t fill[FILL_DIM]; 
 };
 
 void setup();
@@ -67,6 +70,9 @@ void wakupInterrupt() // here the interrupt is handled after wakeup
     wakeUpFlag = true;
 }
 
+/**
+* place the processor to sleep and also disable the IMU
+**/
 void processorSleep()
 {
     Wire.beginTransmission(MPU_addr);
@@ -78,7 +84,7 @@ void processorSleep()
     sleep_enable();                                                                     // enable sleep
     attachInterrupt(digitalPinToInterrupt(LOGGING_BUTTON_PIN), wakupInterrupt, RISING); // set wakeup flag when button is pressed
     sleep_mode();                                                                       // put processor to sleep
-    sleep_disable();                                                                    //disable sleep
+    sleep_disable();                                                                    // disable sleep
     detachInterrupt(digitalPinToInterrupt(LOGGING_BUTTON_PIN));                         // disables interrupt 0 on pin 2 to avoid setting flag
     delay(1000);
 }
@@ -88,8 +94,8 @@ void createBin()
     // max number of blocks to erase per erase call
     const uint32_t ERASE_SIZE = 262144L;
     uint32_t bgnBlock, endBlock;
-  
 
+    // begin capture and set stream to 50Mhz
     if (!sd.begin(CHIP_SELECT_PIN, SD_SCK_MHZ(50)))
     {
         processorSleep();
@@ -99,6 +105,7 @@ void createBin()
         int count = 0;
         while (true)
         {
+            //set filename
             sprintf_P(fileName, PSTR("LOG%05u.BIN"), count);
             if (count > 65533) //There is a max of 65534 logs
             {
@@ -167,7 +174,7 @@ void configureMPU()
 
     Wire.beginTransmission(MPU_addr);
     Wire.write(0x7F);
-    Wire.write(0);
+    Wire.write(0); //SELECT BANK 0
     Wire.endTransmission(true);
 }
 
@@ -182,12 +189,15 @@ void loop()
     }
     else
     {
-        while(recordBinData()){};
+        while (recordBinData())
+        {
+        };
         processorSleep();
     }
 }
 
-bool recordBinData(){
+bool recordBinData()
+{
 
     const uint8_t QUEUE_DIM = BUFFER_BLOCK_COUNT + 1;
     // Index of last queue location.
@@ -206,11 +216,13 @@ bool recordBinData(){
     uint8_t fullHead = 0;
     uint8_t fullTail = 0;
 
+    // use the first block for the sdfat library
     emptyStack[0] = (block_t *)sd.vol()->cacheClear();
     if (emptyStack[0] == 0)
     {
         return false;
     }
+
     // Put rest of buffers on the empty stack.
     for (int i = 1; i < BUFFER_BLOCK_COUNT; i++)
     {
@@ -229,13 +241,12 @@ bool recordBinData(){
     uint32_t bn = 0;
     uint32_t maxLatency = 0;
     uint32_t overrun = 0;
-    //   uint32_t overrunTotal = 0;
     uint32_t logTime = micros();
     while (1)
     {
         // Time for next data record.
         logTime += LOG_INTERVAL_USEC;
-        
+
         //check if logging button is pressed again
         loggingButton = digitalRead(LOGGING_BUTTON_PIN);
         if (loggingButton == HIGH)
@@ -247,9 +258,8 @@ bool recordBinData(){
         {
             if (curBlock != 0)
             {
-                // Put buffer in full queue.
-                fullQueue[fullHead] = curBlock;
-                fullHead = fullHead < QUEUE_LAST ? fullHead + 1 : 0;
+                fullQueue[fullHead] = curBlock; // Put buffer in full queue.
+                fullHead = fullHead < QUEUE_LAST ? fullHead + 1 : 0; // Move head forward in the buffer
                 curBlock = 0;
             }
         }
@@ -266,10 +276,6 @@ bool recordBinData(){
                 curBlock->overrun = overrun;
                 overrun = 0;
             }
-            // while ((int32_t)(logTime - micros()) < 0)
-            // {
-            //     delayMicroseconds(100);
-            // }
             int32_t delta;
             do
             {
@@ -277,7 +283,9 @@ bool recordBinData(){
             } while (delta < 0);
             if (curBlock != 0)
             {
+                // write entry into the current block
                 acquireData(&curBlock->data[curBlock->count++]);
+                // if the block is full then move it to the queue and and move the head forward 
                 if (curBlock->count == DATA_DIM)
                 {
                     fullQueue[fullHead] = curBlock;
@@ -326,15 +334,15 @@ bool recordBinData(){
 void acquireData(data_t *data)
 {
     Wire.beginTransmission(MPU_addr);
-    Wire.write(0x2D); // starting with register 0x3B (ACCEL_XOUT_H)
+    Wire.write(0x2D); // starting with register 0x2D (ACCEL_XOUT_H)
     Wire.endTransmission(false);
     Wire.requestFrom(MPU_addr, 14, true);            // request a total of 14 registers
-    data->accel[0] = Wire.read() << 8 | Wire.read(); // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
-    data->accel[1] = Wire.read() << 8 | Wire.read(); // 0x3D (ACCEL_YOUT_H) a& 0x3E (ACCEL_YOUT_L)
-    data->accel[2] = Wire.read() << 8 | Wire.read(); // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
-    data->gyro[0] = Wire.read() << 8 | Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
-    data->gyro[1] = Wire.read() << 8 | Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
-    data->gyro[2] = Wire.read() << 8 | Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
-    data->temp = Wire.read() << 8 | Wire.read();     // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
-    data->time = micros(); // set time
+    data->accel[0] = Wire.read() << 8 | Wire.read(); // 0x2D (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
+    data->accel[1] = Wire.read() << 8 | Wire.read(); // 0x2F (ACCEL_YOUT_H) a& 0x3E (ACCEL_YOUT_L)
+    data->accel[2] = Wire.read() << 8 | Wire.read(); // 0x31 (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
+    data->gyro[0] = Wire.read() << 8 | Wire.read();  // 0x33 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
+    data->gyro[1] = Wire.read() << 8 | Wire.read();  // 0x35 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
+    data->gyro[2] = Wire.read() << 8 | Wire.read();  // 0x37 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+    data->temp = Wire.read() << 8 | Wire.read();     // 0x39 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
+    data->time = micros();                           // set time
 }
