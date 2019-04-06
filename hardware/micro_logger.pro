@@ -1,6 +1,6 @@
-update=Wed 17 Oct 2018 11:08:52 PM PDT
+update=Fri 05 Apr 2019 11:59:08 PDT
 version=1
-last_client=pcbnew
+last_client=kicad
 [general]
 version=1
 RootSch=
@@ -12,16 +12,6 @@ NetIExt=net
 version=1
 LibDir=
 [eeschema/libraries]
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceAjustPassiveValues=0
-LabSize=50
-ERC_TestSimilarLabels=1
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -68,3 +58,13 @@ SolderMaskClearance=0
 SolderMaskMinWidth=0.25
 SolderPasteClearance=0
 SolderPasteRatio=-0
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=../../../../Desktop/
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceAjustPassiveValues=0
+LabSize=50
+ERC_TestSimilarLabels=1
