@@ -9,6 +9,7 @@
 ## Programming
 
 ```avrdude -c <programmer> -p atmega328 -b 57600  -U flash:w:main.hex -U lfuse:w:0xff:m -U hfuse:w:0xd1:m -U efuse:w:0xff:m```
+[Fuse Calculator](http://eleccelerator.com/fusecalc/fusecalc.php?chip=atmega328p)
 
 
 ![avr fuse](./fuse_bits.png)
