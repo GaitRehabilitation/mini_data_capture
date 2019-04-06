@@ -10,6 +10,9 @@
 
 ```avrdude -c <programmer> -p atmega328 -b 57600  -U flash:w:main.hex -U lfuse:w:0xff:m -U hfuse:w:0xd1:m -U efuse:w:0xff:m```
 
+
+![avr fuse](./fuse_bits.png)
+
 ## Maintainers
 
 The current maintainers of this repository are:
